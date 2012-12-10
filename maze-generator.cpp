@@ -11,6 +11,7 @@ using namespace std;
 #include "simpio.h"
 #include "maze-graphics.h"
 #include "set.h"
+#include "random.h"
 
 #define CATCH_CONFIG_RUNNER
 #include "catch.hpp"
@@ -41,18 +42,26 @@ class MazeManager {
     //
     //The working maze pictured above includes at a few walls that should not be removed,
     //because the cells on either side of each of them are part of the same chamber
+
+    // Generate random wall for consideration that has not been considered before
+
+    // Test for whether selected wall separated two chambers
+    //    a wall that does not separate two chambers should not be removed
+    
     void eliminateWalls() {
         wall considerEliminating = this->getRandomWallToConsiderForElimination();
-        if (this->isWallAtLocation(this->getFullColNumOfWall(
-                                                    considerEliminating),
-                                   this->getFullRowNumOfWall(
-                                                    considerEliminating))) {
-            this->view.removeWall(considerEliminating);
-        }
-        // Generate random wall for consideration that has not been considered before
+        this->removeWall(considerEliminating);
+    }
 
-        // Test for whether selected wall separated two chambers
-        //    a wall that does not separate two chambers should not be removed
+    bool removeWall(wall wallToRemve) {
+        for (int i = 0; i < this->walls.size(); i++) {
+            if (this->walls.get(i) == wallToRemve) {
+                this->view.removeWall(wallToRemve);
+                this->walls.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     void populateBoardInitially() {
@@ -130,14 +139,8 @@ class MazeManager {
     }
 
     wall getRandomWallToConsiderForElimination() {
-        while (true) {
-            double rowNum = 0.0;
-            double colNum = 1.5;
-            if (this->isWallAtLocation(colNum, rowNum)) {
-                return this->getWallAtLocation(colNum, rowNum);
-            }
-            break;
-        }
+        int wallToRemove = randomInteger(0, this->walls.size());
+        return this->walls.get(wallToRemove);
     }
 
  private:
@@ -158,7 +161,7 @@ int main()  {
     // Forward on to CATCH's main using our custom config.
     // This overload doesn't take command line arguments
     // So the config object must be fully set up
-    Catch::Main(config);
+    //Catch::Main(config);
 
     // NORMAL CODE
 	while (true) {
@@ -270,4 +273,37 @@ TEST_CASE( "MazeGenerator/getWallAtLocation", "" ) {
 
     REQUIRE(tManager.getWallAtLocation(0, 0.5) == testWall1);
     REQUIRE_FALSE(tManager.getWallAtLocation(0, 1.5) == testWall1);
+}
+
+TEST_CASE( "MazeGenerator/removeWall", "" ) {
+    cell testCell1;
+    testCell1.col = 0;
+    testCell1.row = 0;
+    cell testCell2;
+    testCell2.col = 0;
+    testCell2.row = 1;
+    wall testWall1;
+    testWall1.one = testCell1;
+    testWall1.two = testCell2;
+
+    // generate a maze object
+    MazeGeneratorView tMazeView = MazeGeneratorView();
+
+    // set dimension
+    int dimension = 3;
+    tMazeView.setDimension(dimension);
+
+    // draw border
+    tMazeView.drawBorder();
+
+    // create mazemanager
+    MazeManager tManager(tMazeView, dimension);
+    tManager.populateBoardInitially();
+    tManager.addWallToMaze(testWall1);
+
+    REQUIRE(tManager.getWallAtLocation(0, 0.5) == testWall1);
+
+    tManager.removeWall(testWall1);
+
+    REQUIRE_FALSE(tManager.getWallAtLocation(0, 0.5) == testWall1);
 }
