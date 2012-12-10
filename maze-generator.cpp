@@ -71,7 +71,7 @@ class MazeManager {
                 this->addWallToMaze(newWall1);
             }
         }
-
+        return;
         // create columns
         for (int colNum = 0; colNum < this->dimension - 1; colNum++) {
             for (int rowNum = 0; rowNum < this->dimension; rowNum++) {
@@ -207,7 +207,6 @@ TEST_CASE( "MazeGenerator/getFullColNumOfWall1", "" ) {
 
     // create mazemanager
     MazeManager tManager(tMazeView, 7);
-    tManager.addWallToMaze(testWall1);
     
     REQUIRE(tManager.getFullColNumOfWall(testWall1) == 1.5);
     REQUIRE(tManager.getFullRowNumOfWall(testWall1) == 1);
@@ -235,7 +234,6 @@ TEST_CASE( "MazeGenerator/getFullColNumOfWall2", "" ) {
 
     // create mazemanager
     MazeManager tManager(tMazeView, 7);
-    tManager.addWallToMaze(testWall1);
 
     REQUIRE(tManager.getFullColNumOfWall(testWall1) == 1);
     REQUIRE(tManager.getFullRowNumOfWall(testWall1) == 1.5);
@@ -256,14 +254,17 @@ TEST_CASE( "MazeGenerator/getWallAtLocation", "" ) {
     MazeGeneratorView tMazeView = MazeGeneratorView();
 
     // set dimension
-    tMazeView.setDimension(7);
+    int dimension = 3;
+    tMazeView.setDimension(dimension);
 
     // draw border
     tMazeView.drawBorder();
 
     // create mazemanager
-    MazeManager tManager(tMazeView, 7);
-    tManager.addWallToMaze(testWall1);
+    MazeManager tManager(tMazeView, dimension);
+    //tManager.populateBoardInitially();
+   // tManager.addWallToMaze(testWall1);
+   // tMazeView.removeWall(testWall1);
 
     REQUIRE(tManager.getFullColNumOfWall(tManager.getWallAtLocation(1, 1.5)) ==
             tManager.getFullColNumOfWall(testWall1));

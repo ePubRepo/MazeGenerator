@@ -39,5 +39,5 @@ inline bool operator<(const wall& one, const wall& two) {
     if (two.one < one.one) return false;
     return one.two < two.two;
 } // yes, this is somewhat arbitrary, but it can be arbitrary as long as it's consistent
-    
+
 #endif
