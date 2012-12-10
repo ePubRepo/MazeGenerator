@@ -40,4 +40,15 @@ inline bool operator<(const wall& one, const wall& two) {
     return one.two < two.two;
 } // yes, this is somewhat arbitrary, but it can be arbitrary as long as it's consistent
 
+inline bool operator==(const wall& one, const wall& two) {
+    if (one.one.col == two.one.col
+        && one.two.col == two.two.col
+        && one.one.row == two.one.row
+        && one.two.row == two.two.row) {
+        return true;
+    }
+    cout << "invalid";
+    return false;
+}
+
 #endif

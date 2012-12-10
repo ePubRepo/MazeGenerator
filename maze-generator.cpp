@@ -43,8 +43,10 @@ class MazeManager {
     //because the cells on either side of each of them are part of the same chamber
     void eliminateWalls() {
         wall considerEliminating = this->getRandomWallToConsiderForElimination();
-        if (this->isWallAtLocation(this->getFullColNumOfWall(considerEliminating),
-                                   this->getFullRowNumOfWall(considerEliminating))) {
+        if (this->isWallAtLocation(this->getFullColNumOfWall(
+                                                    considerEliminating),
+                                   this->getFullRowNumOfWall(
+                                                    considerEliminating))) {
             this->view.removeWall(considerEliminating);
         }
         // Generate random wall for consideration that has not been considered before
@@ -55,8 +57,8 @@ class MazeManager {
 
     void populateBoardInitially() {
         // create rows
-        for (int colNum = 0; colNum < this->dimension; colNum++) {
-            for (int rowNum = 0; rowNum < this->dimension - 1; rowNum++) {
+        for (int colNum = 1; colNum <= this->dimension; colNum++) {
+            for (int rowNum = 0; rowNum < this->dimension; rowNum++) {
                 cell newCell1;
                 newCell1.row = rowNum;
                 newCell1.col = colNum;
@@ -71,9 +73,9 @@ class MazeManager {
                 this->addWallToMaze(newWall1);
             }
         }
-        return;
+
         // create columns
-        for (int colNum = 0; colNum < this->dimension - 1; colNum++) {
+        for (int colNum = 1; colNum <= this->dimension; colNum++) {
             for (int rowNum = 0; rowNum < this->dimension; rowNum++) {
                 cell newCell3;
                 newCell3.row = rowNum;
@@ -93,8 +95,10 @@ class MazeManager {
 
     bool isWallAtLocation(double colNum, double rowNum) {
         for (int i = 0; i < this->walls.size(); i++) {
-            if (this->getFullColNumOfWall(this->walls.get(i)) == colNum
-                && this->getFullRowNumOfWall(this->walls.get(i)) == rowNum)
+            double wallColNum = this->getFullColNumOfWall(this->walls.get(i));
+            double wallRowNum = this->getFullRowNumOfWall(this->walls.get(i));
+            if (wallColNum == colNum
+                && wallRowNum == rowNum)
                 return true;
         }
         return false;
@@ -127,13 +131,11 @@ class MazeManager {
 
     wall getRandomWallToConsiderForElimination() {
         while (true) {
-            double rowNum = 0;
+            double rowNum = 0.0;
             double colNum = 1.5;
             if (this->isWallAtLocation(colNum, rowNum)) {
-                cout << "wall at location" << endl;
                 return this->getWallAtLocation(colNum, rowNum);
             }
-            cout << "not finding a wall to remove" << endl;
             break;
         }
     }
@@ -241,11 +243,11 @@ TEST_CASE( "MazeGenerator/getFullColNumOfWall2", "" ) {
 
 TEST_CASE( "MazeGenerator/getWallAtLocation", "" ) {
     cell testCell1;
-    testCell1.col = 1;
-    testCell1.row = 1;
+    testCell1.col = 0;
+    testCell1.row = 0;
     cell testCell2;
-    testCell2.col = 1;
-    testCell2.row = 2;
+    testCell2.col = 0;
+    testCell2.row = 1;
     wall testWall1;
     testWall1.one = testCell1;
     testWall1.two = testCell2;
@@ -262,12 +264,10 @@ TEST_CASE( "MazeGenerator/getWallAtLocation", "" ) {
 
     // create mazemanager
     MazeManager tManager(tMazeView, dimension);
-    //tManager.populateBoardInitially();
-   // tManager.addWallToMaze(testWall1);
-   // tMazeView.removeWall(testWall1);
+    tManager.populateBoardInitially();
+    tManager.addWallToMaze(testWall1);
+    tMazeView.removeWall(testWall1);
 
-    REQUIRE(tManager.getFullColNumOfWall(tManager.getWallAtLocation(1, 1.5)) ==
-            tManager.getFullColNumOfWall(testWall1));
-    REQUIRE(tManager.getFullRowNumOfWall(tManager.getWallAtLocation(1, 1.5)) ==
-            tManager.getFullRowNumOfWall(testWall1));
+    REQUIRE(tManager.getWallAtLocation(0, 0.5) == testWall1);
+    REQUIRE_FALSE(tManager.getWallAtLocation(0, 1.5) == testWall1);
 }

@@ -44,24 +44,24 @@ void MazeGeneratorView::setDimension(int dimension) {
 }
 
 void MazeGeneratorView::drawWall(const wall& w, const string& color, double inset) {
-	double startx = ulx + w.one.col * this->wallLength;
+	double startx = ulx + (w.one.col-1) * this->wallLength; // bug fixed here
 	double starty = uly + w.one.row * this->wallLength;
-    cout << "Rows : " << w.one.row << " " << w.two.row << endl;
-    cout << "Cols : " << w.one.col << " " << w.two.col << endl;
 	double wallLength = this->wallLength;
 	if (color == kMazeInvisibleColor) {
         wallLength -= 2 * inset;
 	}
 	
 	setColor(color);
-	if (w.one.row == w.two.row) {
+	if (w.one.row == w.two.row) { // major bug fix here
+        // horizontal wall
+        starty += this->wallLength;
+		startx += inset;
+        drawLine(startx, starty, startx + wallLength, starty);
+	} else {
+        // vertical wall
 		startx += this->wallLength;
 		starty += inset;
         drawLine(startx, starty, startx, starty + wallLength);
-	} else {
-		starty += this->wallLength;
-		startx += inset;
-        drawLine(startx, starty, startx + wallLength, starty);
 	}
 }
 
