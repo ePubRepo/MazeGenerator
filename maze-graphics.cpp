@@ -5,10 +5,10 @@
  * graphics routines needed to help animate the construction
  * of a maze.
  */
-
-#include "maze-graphics.h"
+// Copyright 2012 <EB/Stanford>
 
 #include <string>
+#include "maze-graphics.h"
 using namespace std;
 
 /**
@@ -17,11 +17,11 @@ using namespace std;
  * magic values.
  */
 static const string kWindowTitle("Maze Generator");
-static const double kWindowWidth = 14 * 72; // 14 inches at 72 pixel per inch
-static const double kWindowHeight = 8 * 72; // 8 inches at 72 pixels per inch
+static const double kWindowWidth = 14 * 72;  // 14 inches at 72 pixel per inch
+static const double kWindowHeight = 8 * 72;  // 8 inches at 72 pixels per inch
 static const string kMazeVisibleColor("Blue");
 static const string kMazeInvisibleColor("White");
-static const double kMazeSize = 7 * 72; // 7 inches at 72 pixels per inch
+static const double kMazeSize = 7 * 72;  // 7 inches at 72 pixels per inch
 
 MazeGeneratorView::MazeGeneratorView() : GWindow(kWindowWidth, kWindowHeight) {
     ulx = (getWidth() - kMazeSize)/2;
@@ -36,23 +36,26 @@ MazeGeneratorView::~MazeGeneratorView() {
 
 void MazeGeneratorView::setDimension(int dimension) {
     if (dimension <= 0)
-        error("Value passed to MazeGeneratorView::setDimension should be positive.");
+        error("Value passed to MazeGeneratorView::setDimension "
+              "should be positive.");
 
     clear();
     this->dimension = dimension;
     wallLength = kMazeSize / dimension;
 }
 
-void MazeGeneratorView::drawWall(const wall& w, const string& color, double inset) {
-	double startx = ulx + (w.one.col-1) * this->wallLength; // bug fixed here
+void MazeGeneratorView::drawWall(const wall& w,
+                                 const string& color,
+                                 double inset) {
+	double startx = ulx + (w.one.col-1) * this->wallLength;  // bug fixed here
 	double starty = uly + w.one.row * this->wallLength;
 	double wallLength = this->wallLength;
 	if (color == kMazeInvisibleColor) {
         wallLength -= 2 * inset;
 	}
-	
+
 	setColor(color);
-	if (w.one.row == w.two.row) { // major bug fix here
+	if (w.one.row == w.two.row) {  // major bug fix here
         // horizontal wall
         starty += this->wallLength;
 		startx += inset;
@@ -75,7 +78,8 @@ void MazeGeneratorView::drawColoredLine(double startx, double starty,
 void MazeGeneratorView::drawBorder() {
     drawColoredLine(ulx, uly, ulx, uly + kMazeSize, kMazeVisibleColor);
     drawColoredLine(ulx, uly + kMazeSize,
-                    ulx + kMazeSize - wallLength, uly + kMazeSize, kMazeVisibleColor);
+                    ulx + kMazeSize - wallLength, uly + kMazeSize,
+                    kMazeVisibleColor);
     drawColoredLine(ulx + kMazeSize - wallLength, uly + kMazeSize,
                     ulx + kMazeSize, uly + kMazeSize, kMazeInvisibleColor);
     drawColoredLine(ulx + kMazeSize, uly + kMazeSize,

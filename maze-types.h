@@ -47,7 +47,6 @@ inline bool operator==(const wall& one, const wall& two) {
         && one.two.row == two.two.row) {
         return true;
     }
-    cout << "invalid";
     return false;
 }
 
