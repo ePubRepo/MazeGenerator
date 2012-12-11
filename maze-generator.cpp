@@ -72,7 +72,7 @@ class MazeManager {
 
     void populateBoardInitially() {
         // create rows
-        for (int colNum = 0; colNum < this->dimension; colNum++) {
+        for (int colNum = 0; colNum < this->dimension - 1; colNum++) {
             for (int rowNum = 0; rowNum < this->dimension; rowNum++) {
                 cell newCell1;
                 newCell1.row = rowNum;
@@ -91,7 +91,7 @@ class MazeManager {
 
         // create columns
         for (int colNum = 0; colNum < this->dimension; colNum++) {
-            for (int rowNum = 0; rowNum < this->dimension; rowNum++) {
+            for (int rowNum = 0; rowNum < this->dimension - 1; rowNum++) {
                 cell newCell3;
                 newCell3.row = rowNum;
                 newCell3.col = colNum;
@@ -261,7 +261,7 @@ int main()  {
         mazeView.setDimension(dimension);
 
         //  draw border
-        //mazeView.drawBorder();
+        mazeView.drawBorder();
 
         //  create mazemanager
         MazeManager manager(mazeView, dimension);
