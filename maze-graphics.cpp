@@ -47,8 +47,8 @@ void MazeGeneratorView::setDimension(int dimension) {
 void MazeGeneratorView::drawWall(const wall& w,
                                  const string& color,
                                  double inset) {
-	double startx = ulx + (w.one.col-1) * this->wallLength;  // bug fixed here
-	double starty = uly + w.one.row * this->wallLength;
+	double startx = ulx + (w.one.col) * this->wallLength;
+	double starty = uly + (w.one.row) * this->wallLength;
 	double wallLength = this->wallLength;
 	if (color == kMazeInvisibleColor) {
         wallLength -= 2 * inset;
