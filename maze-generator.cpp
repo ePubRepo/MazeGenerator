@@ -39,21 +39,23 @@ class MazeManager {
     }
 
     void eliminateWalls() {
-        for (int i = 0; i < ((this->dimension*this->dimension)); i++) {
-            wall considerEliminating =
-            this->getRandomWallToConsiderForElimination();
+       for (int i = 0; i < ((this->dimension*this->dimension)); i++) {
+            wall considerEliminating = this->getRandomWallToConsiderForElimination();
             if (this->doesWallSeparateTwoChambers(considerEliminating)) {
+                cout << "Would Eliminate Wall: (" <<
+                  this->getFullColNumOfWall(considerEliminating) <<
+                  ", " << this->getFullRowNumOfWall(considerEliminating) << ")" << endl;
                 this->removeWall(considerEliminating);
             }
-
         }
     }
 
     bool doesWallSeparateTwoChambers(wall &wallToTest) {
         int countChambersContainingWall = 0;
         for (int i = 0; i < chambers.size(); i++) {
-            if (this->chambers.get(i).contains(wallToTest))
+            if (this->chambers.get(i).contains(wallToTest)) {
                 countChambersContainingWall++;
+            }
         }
         return (countChambersContainingWall == 2);
     }
@@ -62,6 +64,10 @@ class MazeManager {
         for (int i = 0; i < this->walls.size(); i++) {
             if (this->walls.get(i) == wallToRemve) {
                 this->view.removeWall(wallToRemve);
+
+                cout << "Eliminating Wall: (" <<
+                this->getFullColNumOfWall(wallToRemve) <<
+                ", " << this->getFullRowNumOfWall(wallToRemve) << ")" << endl;
                 this->updateWallChamberSets(wallToRemve);
                 this->walls.remove(i);
                 return true;
@@ -72,7 +78,7 @@ class MazeManager {
 
     void populateBoardInitially() {
         // create rows
-        for (int colNum = 0; colNum < this->dimension - 1; colNum++) {
+        for (int colNum = 1; colNum < this->dimension; colNum++) {
             for (int rowNum = 0; rowNum < this->dimension; rowNum++) {
                 cell newCell1;
                 newCell1.row = rowNum;
@@ -91,7 +97,7 @@ class MazeManager {
 
         // create columns
         for (int colNum = 0; colNum < this->dimension; colNum++) {
-            for (int rowNum = 0; rowNum < this->dimension - 1; rowNum++) {
+            for (int rowNum = 1; rowNum < this->dimension; rowNum++) {
                 cell newCell3;
                 newCell3.row = rowNum;
                 newCell3.col = colNum;
@@ -211,13 +217,11 @@ class MazeManager {
     bool addWallToMaze(wall &wallToAdd) {
         for (int i = 0; i < this->walls.size(); i++) {
             if (this->walls.get(i) == wallToAdd) {
-                cout << "Attempt to Add Duplicate Wall" << endl;
                 return false;
             }
         }
         this->walls.add(wallToAdd);
         this->view.drawWall(wallToAdd);
-        cout << "Size: " << this->walls.size() << endl;
         return true;
     }
 
@@ -415,4 +419,10 @@ TEST_CASE(
 
     wall wallToTest2 = tManager.getWallAtLocation(0, 0.5);
     REQUIRE(tManager.doesWallSeparateTwoChambers(wallToTest2) == false);
+
+    wall wallToTest3 = tManager.getWallAtLocation(0.5, 3);
+    REQUIRE(tManager.doesWallSeparateTwoChambers(wallToTest3) == false);
+
+    wall wallToTest4 = tManager.getWallAtLocation(3, 2.5);
+    REQUIRE(tManager.doesWallSeparateTwoChambers(wallToTest4) == false);
 }
