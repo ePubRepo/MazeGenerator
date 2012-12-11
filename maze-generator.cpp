@@ -42,9 +42,6 @@ class MazeManager {
        for (int i = 0; i < ((this->dimension*this->dimension)); i++) {
             wall considerEliminating = this->getRandomWallToConsiderForElimination();
             if (this->doesWallSeparateTwoChambers(considerEliminating)) {
-                cout << "Would Eliminate Wall: (" <<
-                  this->getFullColNumOfWall(considerEliminating) <<
-                  ", " << this->getFullRowNumOfWall(considerEliminating) << ")" << endl;
                 this->removeWall(considerEliminating);
             }
         }
@@ -63,11 +60,10 @@ class MazeManager {
     bool removeWall(wall wallToRemve) {
         for (int i = 0; i < this->walls.size(); i++) {
             if (this->walls.get(i) == wallToRemve) {
-                this->view.removeWall(wallToRemve);
-
                 cout << "Eliminating Wall: (" <<
                 this->getFullColNumOfWall(wallToRemve) <<
                 ", " << this->getFullRowNumOfWall(wallToRemve) << ")" << endl;
+                this->view.removeWall(wallToRemve);
                 this->updateWallChamberSets(wallToRemve);
                 this->walls.remove(i);
                 return true;

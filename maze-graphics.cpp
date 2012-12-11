@@ -59,11 +59,17 @@ void MazeGeneratorView::drawWall(const wall& w,
         // horizontal wall
         //starty += this->wallLength; BUG
 		//startx += inset; BUG
+        if (color == kMazeInvisibleColor) {
+            startx += inset;
+        }
         drawLine(startx, starty, startx + wallLength, starty);
 	} else {
         // vertical wall
 		//startx += this->wallLength; BUG
 		//starty += inset; BUG
+        if (color == kMazeInvisibleColor) {
+            starty += inset;
+        }
         drawLine(startx, starty, startx, starty + wallLength);
 	}
 }
